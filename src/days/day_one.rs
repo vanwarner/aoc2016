@@ -1,3 +1,4 @@
+/// Day 1 of AoC 2016.
 #[derive(Debug, Hash, Eq, PartialEq)]
 enum Direction {
     North,
@@ -85,6 +86,7 @@ pub fn part_one() {
 pub fn part_two() {
     let mut mypos = Position::new();
     let mut oldpos = Position::new();
+    // using a hashmap instead of something smart because I am not smart
     let mut visited = std::collections::HashMap::new();
     let file = std::fs::read_to_string("./inputs/day_one").unwrap();
     let inputs: Vec<&str> = file.split(',').collect();

@@ -3,10 +3,7 @@ use structopt::StructOpt;
 mod days;
 
 #[derive(StructOpt)]
-#[structopt(
-    name = "Ryan's Advent of Code",
-    about = "Learning Rust with AoC"
-)]
+#[structopt(name = "Ryan's Advent of Code", about = "Learning Rust with AoC")]
 struct Opt {
     /// advent of code day
     day: String,
@@ -29,7 +26,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
 
-        _ => {println!("Implement me later!")}
+        2 => {
+            if !opt.part {
+                days::day_two::part_one();
+            } else {
+                days::day_two::part_two();
+            }
+        }
+
+        _ => println!("Implement me later!"),
     }
     Ok(())
 }
