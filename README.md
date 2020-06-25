@@ -4,7 +4,7 @@ aoc2016 holds my attempts at completing Advent of Code 2016 to ~~re~~learn Rust.
 
 ## Installation
 
-Requires (Rust)[https://www.rust-lang.org] \(duh\). 
+Requires [Rust](https://www.rust-lang.org) \(duh\). 
 
 ## Usage
 
@@ -19,4 +19,4 @@ cargo run 4 -p // runs day 4, part 2
 ## Contributing
 Why?
 
-Yell at me for bad code on (my Twitter)[https://twitter.com/izeryx]. 
+Yell at me for bad code on [my Twitter](https://twitter.com/izeryx). 
