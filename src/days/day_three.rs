@@ -1,12 +1,11 @@
-/// Day 2 of AoC 2016.
-/// Calculated 1848 for Part 2, answer was 1849. 
+use array2d::*;
+/// Day 3 of AoC 2016.
+/// Calculated 1848 for Part 2, answer was 1849.
 /// TODO: Find that edge case. Maybe. I'm pretty lazy...
-
 // namespacing
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
-use array2d::*;
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 where
@@ -43,7 +42,7 @@ pub fn part_two() {
         let mut vertical_lines: Vec<Vec<i32>> = vec![vec![]];
         for line in lines {
             if let Ok(entry) = line {
-                let mut sizes: Vec<i32> = entry
+                let sizes: Vec<i32> = entry
                     .split_whitespace()
                     .map(|x| x.parse::<i32>().unwrap())
                     .collect();
@@ -54,10 +53,10 @@ pub fn part_two() {
             //}
         }
         vertical_lines.remove(0);
-        let mut triangles = Array2D::from_columns(&vertical_lines);
+        let triangles = Array2D::from_columns(&vertical_lines);
         let sides = triangles.as_rows();
-        //println!("{:?}", sides); 
-        for mut row in sides.into_iter(){
+        //println!("{:?}", sides);
+        for mut row in sides.into_iter() {
             while row.len() > 0 {
                 let mut three = row.split_off(row.len() - 3);
                 three.sort_unstable();
@@ -67,7 +66,6 @@ pub fn part_two() {
                 println!("{:?}\n", three);
             }
         }
-        
     }
     println!("Num of possible triangles: {}", num_possible);
 }

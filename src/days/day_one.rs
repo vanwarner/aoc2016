@@ -39,16 +39,14 @@ impl Position {
                 Direction::West => self.dir = Direction::South,
                 Direction::South => self.dir = Direction::East,
                 Direction::East => self.dir = Direction::North,
-                _ => eprintln!("Broke out of enum, nice work idiot"),
             },
             'R' => match self.dir {
                 Direction::North => self.dir = Direction::East,
                 Direction::East => self.dir = Direction::South,
                 Direction::South => self.dir = Direction::West,
                 Direction::West => self.dir = Direction::North,
-                _ => eprintln!("Broke out of enum, nice work idiot"),
             },
-            _ => eprintln!("Not a valid direction!"),
+            _ => ()
         }
         // update the position (x, y) with the rest of the input
         match self.dir {
@@ -56,7 +54,6 @@ impl Position {
             Direction::South => self.y -= steps,
             Direction::East => self.x += steps,
             Direction::West => self.x -= steps,
-            _ => eprintln!("Stop leaving my enum moron"),
         }
     }
 }
