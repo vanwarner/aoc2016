@@ -46,7 +46,7 @@ impl Position {
                 Direction::South => self.dir = Direction::West,
                 Direction::West => self.dir = Direction::North,
             },
-            _ => ()
+            _ => (),
         }
         // update the position (x, y) with the rest of the input
         match self.dir {
