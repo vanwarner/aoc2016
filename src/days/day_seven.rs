@@ -1,6 +1,4 @@
-use array2d::*;
-/// Day 6 of AoC 2016.
-/// Calculated 1848 for Part 2, answer was 1849.
+/// Day 7 of AoC 2016.
 // namespacing
 use std::fs::File;
 use std::io::{self, BufRead};
@@ -14,37 +12,122 @@ where
     Ok(io::BufReader::new(file).lines())
 }
 
-pub fn part_one() {
-    if let Ok(lines) = read_lines("inputs/day_six") {
-        let mut vertical_lines: Vec<Vec<char>> = vec![vec![]];
+fn get_ipv7_inputs<'a>() -> Vec<Vec<String>> {
+    let mut result: Vec<Vec<String>> = vec![vec![]];
+    if let Ok(lines) = read_lines("inputs/day_seven") {
         for line in lines {
             if let Ok(entry) = line {
-                let mut chars: Vec<char> = vec![];
-                for char in entry.chars() {
-                    chars.push(char);
-                }
-                vertical_lines.push(chars);
+                let split_line: Vec<String> = entry
+                    .split(|c| c == ']' || c == '[')
+                    .map(|c| c.to_string())
+                    .collect();
+                result.push(split_line);
             }
-        }
-        vertical_lines.remove(0);
-        println!("{:?}", vertical_lines);
-        let two_dimensions = Array2D::from_columns(&vertical_lines);
-        let input_fixed = two_dimensions.as_rows();
-        println!("{:?}", input_fixed);
-        for row_iter in input_fixed.iter() {
-            let mut frequency: std::collections::HashMap<char, u32> =
-                std::collections::HashMap::new();
-            for element in row_iter {
-                *frequency.entry(*element).or_insert(0) += 1;
-            }
-            let mut most_common: Vec<_> = frequency.iter().collect();
-            most_common.sort_by(|a, b| b.1.cmp(a.1));
-            println!("{:?}", most_common);
         }
     }
+    result.remove(0);
+    result
 }
+
+fn valid_ipv7(ipv7: Vec<String>) -> Vec<bool> {
+    let mut flags: Vec<bool> = vec![];
+    for slice in 0..ipv7.len() {
+        let mut flag: bool;
+        let hypernet = &ipv7[slice];
+        if slice % 2 == 1 {
+            // slice in brackets
+            flag = true;
+            for char in 0..(hypernet.len() - 3) {
+                if hypernet.chars().nth(char) == hypernet.chars().nth(char + 3)
+                    && hypernet.chars().nth(char + 1) == hypernet.chars().nth(char + 2)
+                    && hypernet.chars().nth(char) != hypernet.chars().nth(char + 1)
+                {
+                    flag = false;
+                    break;
+                }
+            }
+        } else {
+            // slice outside brackets
+            flag = false;
+            for char in 0..(hypernet.len() - 3) {
+                if hypernet.chars().nth(char) == hypernet.chars().nth(char + 3)
+                    && hypernet.chars().nth(char + 1) == hypernet.chars().nth(char + 2)
+                    && hypernet.chars().nth(char) != hypernet.chars().nth(char + 1)
+                {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        flags.push(flag);
+    }
+    flags
+}
+
+fn valid_ssl(ipv7: Vec<String>) -> bool {
+    let mut aba: Vec<_> = vec![];
+    for slice in (0..ipv7.len()).step_by(2) {
+        // look at supernet first
+        let supernet = &ipv7[slice];
+        for char in 0..(supernet.len() - 2) {
+            if supernet.chars().nth(char) == supernet.chars().nth(char + 2)
+                && supernet.chars().nth(char) != supernet.chars().nth(char + 1)
+            {
+                aba.push((supernet.chars().nth(char), supernet.chars().nth(char + 1)));
+            }
+        }
+    }
+    if aba.len() == 0 {
+        return false;
+    } else {
+        for slice in (1..ipv7.len()).step_by(2) {
+            let hypernet = &ipv7[slice];
+            for char in 0..(hypernet.len() - 2) {
+                for tuple in aba.iter() {
+                    if hypernet.chars().nth(char) == tuple.1
+                        && hypernet.chars().nth(char + 1) == tuple.0
+                        && hypernet.chars().nth(char + 2) == tuple.1
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    false
+}
+
+pub fn part_one() {
+    let test = get_ipv7_inputs();
+    let mut sum = 0;
+    for line in test.iter() {
+        let bools = valid_ipv7(line.to_vec());
+        println!("{:?}", bools);
+        let mut or: bool = false;
+        let mut skip: bool = false;
+        for value in 0..bools.len() {
+            if value % 2 == 1 && bools[value] == false {
+                skip = true;
+                break;
+            } else if value % 2 == 0 {
+                or = or || bools[value];
+            }
+        }
+        if or == true && skip == false {
+            sum += 1
+        }
+    }
+    println!("Number of valid IPv7: {}", sum);
+}
+
 pub fn part_two() {
-    // asks for the least common letter, since I'm printing the entire frequency map just look in
-    // the last column lol
-    part_one();
+    let test = get_ipv7_inputs();
+    let mut sum = 0;
+    for line in test.iter() {
+        let bool = valid_ssl(line.to_vec());
+        if bool {
+            sum += 1;
+        }
+    }
+    println!("Number of valid SSL: {}", sum);
 }
