@@ -58,6 +58,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
 
+        6 => {
+            if !opt.part {
+                days::day_six::part_one();
+            } else {
+                days::day_six::part_two();
+            }
+        }
+
+        7 => {
+            if !opt.part {
+                days::day_seven::part_one();
+            } else {
+                days::day_seven::part_two();
+            }
+        }
         _ => println!("Implement me later!"),
     }
     Ok(())
